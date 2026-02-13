@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start:ollama": "node server-ollama.js",
+    "dev:ollama": "nodemon server-ollama.js"
   },
   "keywords": [
     "retrospective",
