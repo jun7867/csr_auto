@@ -3,9 +3,32 @@
 
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
+
+// guide.md 파일 읽기
+let GUIDE_CONTENT = '';
+try {
+    GUIDE_CONTENT = fs.readFileSync(path.join(__dirname, 'guide.md'), 'utf-8');
+    console.log('✅ guide.md 파일을 성공적으로 로드했습니다.');
+} catch (error) {
+    console.warn('⚠️ guide.md 파일을 찾을 수 없습니다. 기본 가이드를 사용합니다.');
+    GUIDE_CONTENT = `# 회고 작성 가이드
+
+당신은 5년 차 프론트엔드 개발자입니다.
+아래 "오늘 한 일"을 바탕으로 회고 텍스트를 작성해주세요.
+
+## 작성 규칙
+1. 말투는 담백하고 전문적으로 작성할 것.
+2. '문제 -> 해결 -> 배운 점' 구조를 유지할 것.
+3. 너무 길지 않게 3~5줄 내외로 요약할 것.
+4. 이모지는 쓰지마. ** 이런것도 쓰지말고.
+
+[느끼다, 깨우다, 바꾸다] 형식으로 작성해주세요.`;
+}
 
 // CORS 설정 (브라우저에서 접근 가능하도록)
 app.use(cors());
@@ -13,19 +36,15 @@ app.use(express.json());
 
 // Ollama API 호출 함수
 async function callOllamaAPI(task, guide) {
-    const prompt = `${guide}
+    // guide 파라미터가 있으면 사용, 없으면 guide.md 내용 사용
+    const guideContent = guide || GUIDE_CONTENT;
 
-오늘 한 일: ${task}
+    const prompt = `${guideContent}
 
-위 내용을 바탕으로 [느끼다, 깨우다, 바꾸다] 형식의 회고를 작성해주세요.
-규칙:
-- 5년차 프론트엔드 개발자의 관점
-- 담백하고 전문적인 말투
-- 각 섹션당 3~5줄
-- 이모지 적절히 사용 (🔥, ✅, 💡, ✨)
-- ** 같은 마크다운 문법은 제거하고 순수 텍스트로만 작성
+오늘 한 일:
+${task}
 
-바로 복사해서 사용할 수 있도록 작성해주세요.`;
+위 내용을 바탕으로 회고를 작성해주세요.`;
 
     try {
         const response = await fetch('http://localhost:11434/api/generate', {
@@ -58,11 +77,11 @@ async function callOllamaAPI(task, guide) {
 function generateFallbackRetrospective(task) {
     return `[느끼다]
 
-오늘은 "${task}"을(를) 진행했다. 계획한 작업을 차근차근 수행하면서 목표를 달성할 수 있었고, 과정에서 기술적으로 성장하는 계기가 되었다. ✅
+오늘은 "${task}"을(를) 진행했다. 계획한 작업을 차근차근 수행하면서 목표를 달성할 수 있었고, 과정에서 기술적으로 성장하는 계기가 되었다. 작업을 마친 뒤 결과물을 보니 전체적인 완성도가 높아졌다는 확신이 들어 뿌듯했다.
 
 [깨우다]
 
-이번 작업의 핵심은 단순히 기능을 구현하는 것이 아니라, 사용자 관점에서 완성도를 높이는 것이었다. 세부적인 부분에 집중한 덕분에 전체 품질이 향상되었다는 것을 체감했다. 🔥
+이번 작업의 핵심은 단순히 기능을 구현하는 것이 아니라, 사용자 관점에서 완성도를 높이는 것이었다. 세부적인 부분에 집중한 덕분에 전체 품질이 향상되었다는 것을 체감했다.
 
 [바꾸다]
 
