@@ -79,7 +79,9 @@
 
 오늘 한 일: {{TASK}}
 
-위 예시처럼 작성해주세요.`;
+위 예시처럼 작성해주세요. 
+(최소 1000자에서 2000자 까지 자세하고 디테일하게 적어줬으면 좋겠어. 개발자가 쓴것처럼 해서)
+`;
 
         // Gemini API 호출 (로컬 프록시 서버 통해)
         async function requestRetrospectiveFromGemini(task) {
