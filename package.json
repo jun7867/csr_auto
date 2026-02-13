@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "start:o": "node server-ollama.js",
-    "dev:ollama": "nodemon server-ollama.js"
+    "start:ollama": "node server-ollama.js",
+    "dev:ollama": "nodemon server-ollama.js",
+    "start:g": "node server-gemini.js",
+    "dev:gemini": "nodemon server-gemini.js"
   },
   "keywords": [
     "retrospective",
