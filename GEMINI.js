@@ -97,8 +97,8 @@ async function requestRetrospectiveFromGemini(task) {
 
     const GEMINI_API_KEY = getApiKey();
 
-    // 🔥 수정된 부분: 모델명을 'gemini-1.5-flash-latest'로 변경
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+    // 🔥 수정된 부분: 모델명을 'gemini-2.5-flash-liteh-latest'로 변경
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
 
     try {
         const response = await fetch(url, {
